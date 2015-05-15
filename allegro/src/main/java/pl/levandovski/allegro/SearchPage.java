@@ -1,11 +1,13 @@
 package pl.levandovski.allegro;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,5 +94,42 @@ public class SearchPage {
 		List<WebElement> searchItemsFirstPageCountElement = featuredOffers.findElements(By.className("excerpt"));
 		LOGGER.info("Items on first page: {}", searchItemsFirstPageCountElement.size());
 		return searchItemsFirstPageCountElement.size();
+	}
+	
+	/**
+     * Filter items by province
+     * @param provinceEnum - province
+     * @return SearchPage 
+     */
+	public SearchPage filterByProvince(ProvinceEnum provinceEnum) {
+		Select dropdown = new Select(driver.findElement(By.id("state")));
+		dropdown.selectByVisibleText(provinceEnum.getValue());
+		LOGGER.info("Selected province: {}", provinceEnum);
+		return this;
+	}
+	
+	/**
+     * Get item URLs
+     * @return List of URL strings 
+     */
+	public List<String> getSearchItemsUrls() {
+		List<String> itemsUrls = new ArrayList<String>();
+		WebElement featuredOffers = null;
+		try {
+			featuredOffers = driver.findElement(By.id("featured-offers"));
+		} catch (NoSuchElementException e) {
+			LOGGER.warn("Element featuredOffers not found!");
+		}
+		
+		if(featuredOffers == null) {
+			return new ArrayList<String>(0);
+		}
+		
+		List<WebElement> searchItemsElements = featuredOffers.findElements(By.className("excerpt"));
+		for (WebElement webElement : searchItemsElements) {
+			itemsUrls.add(webElement.findElement(By.tagName("a")).getAttribute("href"));
+		}
+		
+		return itemsUrls;
 	}
 }

@@ -1,5 +1,7 @@
 package pl.levandovski.allegro;
 
+import java.util.List;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.slf4j.Logger;
@@ -83,7 +85,30 @@ public class SearchPageTest {
 	@Test
 	public void getSearchItemsFirstPageCountNegativeTest() {
 		SearchPage searchPage = new HomePage(driver).searchByName("not_existing_item");
-		int earchItemsFirstPageCount = searchPage.getSearchItemsFirstPageCount();
-		Assert.assertEquals(earchItemsFirstPageCount, 0);
+		int searchItemsFirstPageCount = searchPage.getSearchItemsFirstPageCount();
+		Assert.assertEquals(searchItemsFirstPageCount, 0);
+	}
+	
+	@Test
+	public void filterByProvinceTest() {
+		SearchPage searchPage = new HomePage(driver).searchByName("wrotki").filterByProvince(ProvinceEnum.MAZOWIECKIE);
+		int searchItemsCountFromProvince = searchPage.getSearchItemsFirstPageCount();
+		Assert.assertNotNull(searchItemsCountFromProvince);
+	}
+	
+	@Test
+	public void getSearchItemsUrlsTest() {
+		List<String> itemUrls = new HomePage(driver).searchByName("wrotki").getSearchItemsUrls();
+		Assert.assertNotNull(itemUrls);
+		Assert.assertEquals(itemUrls.size(), 60);
+	}
+	
+	@Test
+	public void filterByProvinceAndDisplayUrlsTest() {
+		List<String> itemUrls = new HomePage(driver).searchByName("wrotki").filterByProvince(ProvinceEnum.MAZOWIECKIE).getSearchItemsUrls();
+		Assert.assertNotNull(itemUrls);
+		for (String string : itemUrls) {
+			LOGGER.info(string);
+		}
 	}
 }
