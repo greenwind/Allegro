@@ -28,7 +28,7 @@ public class HomePage {
      */
 	public SearchPage searchByName(String searchString) {
 		WebElement searchField = driver.findElement(By.id("main-search-text"));
-		WebElement submitButton = driver.findElement(By.className("sprite search-btn"));
+		WebElement submitButton = driver.findElement(By.xpath(".//*[@id='main-search']/input"));
 		searchField.sendKeys(searchString);
 		submitButton.click();
 		return new SearchPage(driver);

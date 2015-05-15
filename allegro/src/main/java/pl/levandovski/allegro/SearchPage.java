@@ -1,6 +1,9 @@
 package pl.levandovski.allegro;
 
+import java.util.List;
+
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
@@ -29,7 +32,7 @@ public class SearchPage {
      */
 	public SearchPage searchByName(String searchString) {
 		WebElement searchField = driver.findElement(By.id("main-search-text"));
-		WebElement submitButton = driver.findElement(By.className("sprite search-btn"));
+		WebElement submitButton = driver.findElement(By.xpath(".//*[@id='main-search']/input"));
 		searchField.sendKeys(searchString);
 		submitButton.click();
 		return this;
@@ -69,5 +72,25 @@ public class SearchPage {
 		Long usedItemCount = Long.parseLong(usedItemCountString);
 		LOGGER.info("Used items: {}", usedItemCount);
 		return usedItemCount;
+	}
+	
+	/**
+     * Get items count from first page
+     * @return the resulting int 
+     */
+	public int getSearchItemsFirstPageCount() {
+		WebElement featuredOffers = null;
+		try {
+			featuredOffers = driver.findElement(By.id("featured-offers"));
+		} catch (NoSuchElementException e) {
+			LOGGER.warn("Element featuredOffers not found!");
+		}
+		
+		if(featuredOffers == null) {
+			return 0;
+		}
+		List<WebElement> searchItemsFirstPageCountElement = featuredOffers.findElements(By.className("excerpt"));
+		LOGGER.info("Items on first page: {}", searchItemsFirstPageCountElement.size());
+		return searchItemsFirstPageCountElement.size();
 	}
 }

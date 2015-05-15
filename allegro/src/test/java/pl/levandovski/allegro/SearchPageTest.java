@@ -9,10 +9,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import pl.levandovski.allegro.SearchPageTest;
-import pl.levandovski.allegro.HomePage;
-import pl.levandovski.allegro.SearchPage;
-
 public class SearchPageTest {
 	public WebDriver driver;
 	
@@ -74,5 +70,20 @@ public class SearchPageTest {
 		Long searchUsedItemsCount = searchPage.getSearchUsedItemsCount();
 		Assert.assertNotNull(searchUsedItemsCount);
 		Assert.assertEquals(searchUsedItemsCount.longValue(), 0L);
+	}
+	
+	@Test
+	public void getSearchItemsFirstPageCountTest() {
+		SearchPage searchPage = new HomePage(driver).searchByName("wrotki");
+		int earchItemsFirstPageCount = searchPage.getSearchItemsFirstPageCount();
+		Assert.assertTrue(earchItemsFirstPageCount > 0);
+		Assert.assertEquals(earchItemsFirstPageCount, 60);
+	}
+	
+	@Test
+	public void getSearchItemsFirstPageCountNegativeTest() {
+		SearchPage searchPage = new HomePage(driver).searchByName("not_existing_item");
+		int earchItemsFirstPageCount = searchPage.getSearchItemsFirstPageCount();
+		Assert.assertEquals(earchItemsFirstPageCount, 0);
 	}
 }
