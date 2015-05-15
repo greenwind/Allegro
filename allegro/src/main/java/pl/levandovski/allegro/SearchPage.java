@@ -13,18 +13,37 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class SearchPage {
-	private WebDriver driver;
-	public SearchPage(WebDriver driver) {
-		this.driver = driver;
-	}
 	
 	public final static Logger LOGGER = LoggerFactory.getLogger(SearchPage.class);
 	
+	private WebDriver driver;
+	
+	public SearchPage(WebDriver driver) {
+		this.driver = driver;
+	}
+
+	/**
+     * Search for item
+     * @param searchString - name of the item
+     * @return SearchPage
+     */
 	public SearchPage searchByName(String searchString) {
 		WebElement searchField = driver.findElement(By.id("main-search-text"));
 		WebElement submitButton = driver.findElement(By.className("sprite search-btn"));
 		searchField.sendKeys(searchString);
 		submitButton.click();
 		return this;
+	}
+	
+	/**
+     * Get items count
+     * @return the resulting long 
+     */
+	public Long getSearchItemsCount() {
+		WebElement searchHits = driver.findElement(By.id("main-breadcrumb-search-hits"));
+		String itemsCountString = searchHits.getText().replaceAll( "[^\\d]", "");
+		Long itemsCount = Long.parseLong(itemsCountString);
+		LOGGER.info("All items: {}", itemsCount);
+		return itemsCount;
 	}
 }
