@@ -40,10 +40,34 @@ public class SearchPage {
      * @return the resulting long 
      */
 	public Long getSearchItemsCount() {
-		WebElement searchHits = driver.findElement(By.id("main-breadcrumb-search-hits"));
-		String itemsCountString = searchHits.getText().replaceAll( "[^\\d]", "");
+		WebElement searchItemCountElement = driver.findElement(By.id("main-breadcrumb-search-hits"));
+		String itemsCountString = searchItemCountElement.getText().replaceAll( "[^\\d]", "");
 		Long itemsCount = Long.parseLong(itemsCountString);
 		LOGGER.info("All items: {}", itemsCount);
 		return itemsCount;
+	}
+	
+	/**
+     * Get new items count
+     * @return the resulting long 
+     */
+	public Long getSearchNewItemsCount() {
+		WebElement newItemCountElement = driver.findElement(By.xpath(".//*[@id='display-form']/fieldset[1]/ul/li[1]/label/a/span/span"));
+		String newItemsCountString = newItemCountElement.getText().replaceAll( "[^\\d]", "");
+		Long newItemsCount = Long.parseLong(newItemsCountString);
+		LOGGER.info("New items: {}", newItemsCount);
+		return newItemsCount;
+	}
+	
+	/**
+     * Get used items count
+     * @return the resulting long 
+     */
+	public Long getSearchUsedItemsCount() {
+		WebElement usedItemCountElement = driver.findElement(By.xpath(".//*[@id='display-form']/fieldset[1]/ul/li[2]/label/a/span/span"));
+		String usedItemCountString = usedItemCountElement.getText().replaceAll( "[^\\d]", "");
+		Long usedItemCount = Long.parseLong(usedItemCountString);
+		LOGGER.info("Used items: {}", usedItemCount);
+		return usedItemCount;
 	}
 }

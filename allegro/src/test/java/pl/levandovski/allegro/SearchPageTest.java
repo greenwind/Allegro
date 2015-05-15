@@ -45,4 +45,34 @@ public class SearchPageTest {
 		Assert.assertNotNull(searchItemsCount);
 		Assert.assertEquals(searchItemsCount.longValue(), 0L);
 	}
+	
+	@Test
+	public void getSearchNewItemsCountTest() {
+		SearchPage searchPage = new HomePage(driver).searchByName("wrotki");
+		Long searchNewItemsCount = searchPage.getSearchNewItemsCount();
+		Assert.assertNotNull(searchNewItemsCount);
+	}
+	
+	@Test
+	public void getSearchNewItemsCountNegativeTest() {
+		SearchPage searchPage = new HomePage(driver).searchByName("not_existing_item");
+		Long searchNewItemsCount = searchPage.getSearchNewItemsCount();
+		Assert.assertNotNull(searchNewItemsCount);
+		Assert.assertEquals(searchNewItemsCount.longValue(), 0L);
+	}
+	
+	@Test
+	public void getSearchUsedItemsCountTest() {
+		SearchPage searchPage = new HomePage(driver).searchByName("wrotki");
+		Long searchUsedItemsCount = searchPage.getSearchUsedItemsCount();
+		Assert.assertNotNull(searchUsedItemsCount);
+	}
+	
+	@Test
+	public void getSearchUsedItemsCountNegativeTest() {
+		SearchPage searchPage = new HomePage(driver).searchByName("not_existing_item");
+		Long searchUsedItemsCount = searchPage.getSearchUsedItemsCount();
+		Assert.assertNotNull(searchUsedItemsCount);
+		Assert.assertEquals(searchUsedItemsCount.longValue(), 0L);
+	}
 }
