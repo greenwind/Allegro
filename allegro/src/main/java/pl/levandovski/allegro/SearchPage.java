@@ -7,7 +7,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -105,7 +107,26 @@ public class SearchPage {
 		Select dropdown = new Select(driver.findElement(By.id("state")));
 		dropdown.selectByVisibleText(provinceEnum.getValue());
 		LOGGER.info("Selected province: {}", provinceEnum);
+		
+		new WebDriverWait(driver, 10, 500).until(new ExpectedCondition<Boolean>() {
+			@Override
+			public Boolean apply(WebDriver driver) {
+				LOGGER.info("waiting for selecting province");
+				return isProvinceSet(driver);
+			}
+		});
 		return this;
+	}
+	
+	/**
+	 *  Checking if province is selected
+	 * @param driver
+	 * @return boolean
+	 */
+	private boolean isProvinceSet(WebDriver driver) {
+		WebElement isProvinceSetElement = driver.findElement(By.cssSelector(".param-toggle.checked"));
+		LOGGER.info("Found selected province: {}", isProvinceSetElement != null);
+		return isProvinceSetElement != null;
 	}
 	
 	/**

@@ -1,6 +1,7 @@
 package pl.levandovski.allegro;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -12,6 +13,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 public class SearchPageTest {
+	
 	public WebDriver driver;
 	
 	public final static Logger LOGGER = LoggerFactory.getLogger(SearchPageTest.class);
@@ -19,6 +21,7 @@ public class SearchPageTest {
 	@BeforeMethod
 	public void beforeMethod() {
 		driver = new FirefoxDriver();
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		driver.get("http://allegro.pl");
 	}
 
@@ -32,8 +35,6 @@ public class SearchPageTest {
 		SearchPage searchPage = new HomePage(driver).searchByName("wrotki");
 		Long searchItemsCount = searchPage.getSearchItemsCount();
 		Assert.assertNotNull(searchItemsCount);
-		// how to check it?
-		// Assert.assertEquals(searchItemsCount.longValue(), 14L);
 	}
 	
 	@Test
@@ -101,13 +102,17 @@ public class SearchPageTest {
 		List<String> itemUrls = new HomePage(driver).searchByName("wrotki").getSearchItemsUrls();
 		Assert.assertNotNull(itemUrls);
 		Assert.assertEquals(itemUrls.size(), 60);
+		for (String string : itemUrls) {
+			LOGGER.info(string);
+		}
 	}
 	
 	@Test
 	public void filterByProvinceAndDisplayUrlsTest() {
-		List<String> itemUrls = new HomePage(driver).searchByName("wrotki").filterByProvince(ProvinceEnum.MAZOWIECKIE).getSearchItemsUrls();
-		Assert.assertNotNull(itemUrls);
-		for (String string : itemUrls) {
+		SearchPage itemUrls = new HomePage(driver).searchByName("wrotki").filterByProvince(ProvinceEnum.MAZOWIECKIE);
+		List<String> urls = itemUrls.getSearchItemsUrls();
+		Assert.assertNotNull(urls);
+		for (String string : urls) {
 			LOGGER.info(string);
 		}
 	}

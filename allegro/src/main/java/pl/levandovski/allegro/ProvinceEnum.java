@@ -1,5 +1,11 @@
 package pl.levandovski.allegro;
 
+/**
+ * Enum representing available provinces on filtering options
+ * 
+ * @author Marek Lewandowski
+ *
+ */
 public enum ProvinceEnum {
 	DOLNOSLASKIE("z dolnośląskiego"),
 	KUJAWSKOPOMORSKIE("z kujawsko-pomorskiego"),
