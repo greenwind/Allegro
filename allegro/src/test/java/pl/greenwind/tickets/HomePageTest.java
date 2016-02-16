@@ -10,6 +10,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -33,20 +34,27 @@ public class HomePageTest {
 
 	@Test
 	public void getSearchItemsCountTest() {
-		HomeSearchRequest request = HomeSearchRequest.builder()
-				.from("Warszawa, Polska")
-				.fromCode("WAW")
-				.to("Tokyo, Japan")
-				.toCode("TYO")
-				.dateFrom(LocalDate.of(2016, 3, 16))
-				.dateTo(LocalDate.of(2016, 3, 20))
-				.build();
-		SearchPage searchPage = new HomePage(driver).search(request);
-		List<Double> prices = searchPage.getPrices();
-		Assert.assertNotNull(prices);
-		LOGGER.info("request = {}", request);
-		LOGGER.info("prices = {}", prices);
-		LOGGER.info(searchPage.getPage());
+		LocalDate from = LocalDate.of(2016, 10, 1);
+		LocalDate to = LocalDate.of(2016, 10, 10);
+
+		for (int i = 0; i < Period.between(from, to).getDays(); ++i) {
+			HomeSearchRequest request = HomeSearchRequest.builder()
+					.from("Berlin, Niemcy")
+					.fromCode("BER")
+					.to("Tokyo, Japan")
+					.toCode("TYO")
+					.dateFrom(from.plusDays(i))
+					.dateTo(from.plusDays(i + 1))
+					.build();
+			SearchPage searchPage = new HomePage(driver).search(request);
+			List<Double> prices = searchPage.getPrices();
+			Assert.assertNotNull(prices);
+			LOGGER.info("request = {}", request);
+			LOGGER.info("prices = {}", prices);
+			driver.get(HomePage.HOME);
+		}
+
+		//LOGGER.info(searchPage.getPage());
 	}
 
 

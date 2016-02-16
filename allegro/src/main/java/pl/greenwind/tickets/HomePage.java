@@ -52,14 +52,19 @@ public class HomePage {
 		js.executeScript("$('#to_code').val('" + req.getToCode() + "')");
 
 		selectDate(dateFrom, req.getDateFrom());
-		selectDate(dateTo, req.getDateTo());
+		if (dateTo.isDisplayed()) {
+			selectDate(dateTo, req.getDateTo());
+		}
+
+		// one way
+		js.executeScript("$('input:radio[name=direction]').filter('[value=1]').attr('checked', true)");
 
 		js.executeScript("$('.search_button')[0].click()");
 
 		new WebDriverWait(driver, 60*2, 500).until(new ExpectedCondition<Boolean>() {
 			@Override
 			public Boolean apply(WebDriver driver) {
-				LOGGER.info("Waiting for search result page...");
+				//LOGGER.info("Waiting for search result page...");
 				return driver.findElement(By.className("change_search")) != null;
 			}
 		});
